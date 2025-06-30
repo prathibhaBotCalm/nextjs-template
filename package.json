@@ -5,13 +5,22 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:ts": "tsc -b",
+    "build:check": "tsc --noEmit",
     "start": "next start",
-    "lint": "eslint . --fix",
-    "prepare": "husky install",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky",
     "format": "prettier  \"app/**/*.{ts,tsx,js,json}\" --ignore-path .gitignore",
     "format:check": "yarn format --check",
     "format:write": "yarn format --write",
-    "validate": "yarn format:write && yarn lint && yarn build"
+    "type-check": "tsc --noEmit",
+    "test": "echo \"No tests specified\" && exit 0",
+    "pre-commit": "lint-staged && yarn build:ts",
+    "pre-push": "yarn build:check",
+    "validate": "yarn format && yarn lint && yarn build:check",
+    "validate:fix": "yarn format:write && yarn lint:fix && yarn build:check",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "dependencies": {
     "next": "15.2.1",
@@ -39,12 +48,6 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged",
-      "commit-msg": "npx commitlint --edit $1"
-    }
   },
   "lint-staged": {
     "!(.next)/**/*.{js,ts,tsx,jsx}": [
